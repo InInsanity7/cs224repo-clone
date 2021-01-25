@@ -41,8 +41,15 @@ FILE *parseCommandLine(int argc, char **argv, int *bits) {
  * data: an array of no more than 16 characters
  * size: the size of the array
  **/
+
 void printDataAsHex(unsigned char *data, size_t size) {
-  printf("TODO 1: printDataAsHex (2)");
+  for (int i = 0; i < size; i++) {
+    printf(" ");
+    printf("%02x", data[i]);
+    ++i;
+    (i < size) ? printf("%02x", data[i])
+	       : printf("0a");
+  }
 }
 
 /**
@@ -54,9 +61,11 @@ void printDataAsHex(unsigned char *data, size_t size) {
  * size: the size of the array
  **/
 void printDataAsChars(unsigned char *data, size_t size) {
-  printf("TODO 2: printDataAsChars (3)");
+	for(int i = 0; i < size; i++) {
+		printf("%c", data[i]);
 }
 
+//Hex read, send to print
 void readAndPrintInputAsHex(FILE *input) {
   unsigned char data[16];
   int numBytesRead = fread(data, 1, 16, input);
@@ -71,16 +80,28 @@ void readAndPrintInputAsHex(FILE *input) {
     numBytesRead = fread(data, 1, 16, input);
   }
 }
-
-/**
- * Bits output for xxd.
- *
- * See myxxd.md for details.
- *
- * input: input stream
- **/
+//Bit print
+void printDataAsBits(unsigned char *data, size_t size) {
+  while (i < 6) {
+    if (i < size) {
+      printf(" ");
+      printf(%08b
+		//
+	
+//Bit read, send to print		     
 void readAndPrintInputAsBits(FILE *input) {
-  printf("TODO 3: readAndPrintInputAsBits\n");
+  unsigned char data[6];
+  int numBytesRead = fread(data, 1, 6, input);
+  unsigned int offset = 0;
+  while (numBytesRead != 0) {
+    printf("%08x:", offset);
+    offset += numBytesRead;
+    printDataAsBits(data, numBytesRead);
+    printf("  ");
+    printDataAsChars(data, numBytesRead);
+    printf("\n");
+    numBytesRead = fread(data, 1, 16, input);
+  }
 }
 
 int main(int argc, char **argv) {
