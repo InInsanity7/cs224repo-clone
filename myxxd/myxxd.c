@@ -1,7 +1,7 @@
+#include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-
 #define TRUE 1
 #define FALSE 0
 #define BAD_NUMBER_ARGS 1
@@ -43,12 +43,21 @@ FILE *parseCommandLine(int argc, char **argv, int *bits) {
  **/
 
 void printDataAsHex(unsigned char *data, size_t size) {
+  int printCount = 0;
+  //print data as hex
   for (int i = 0; i < size; i++) {
     printf(" ");
     printf("%02x", data[i]);
     ++i;
     (i < size) ? printf("%02x", data[i])
 	       : printf("0a");
+    //track spaces printed
+    printCount += 5;
+  }
+  //print remaining for width 20
+  while (printCount < 40) {
+	  printf(" ");
+	  ++printCount;
   }
 }
 
@@ -82,10 +91,24 @@ void readAndPrintInputAsHex(FILE *input) {
 }
 //Bit print
 void printDataAsBits(unsigned char *data, size_t size) {
-  while (i < 6) {
-    if (i < size) {
-      printf(" ");
-      printf(%08b
+  int printCount = 0;
+  int decimalVal;
+  for (int i = 0; i < size; i++) {
+	printf(" ");
+	++printCount;
+	decimalVal = (int)(data[i]);
+	for (int j = 7; j >= 0; j--) {
+		binaryTmp = decimalVal % (2 << j);
+		printf("%d", binaryTmp);
+		++printCount;
+		decimalVal -= (2 << j);
+	}
+  }
+  while (printCount < 54) {
+	  printf(" ");
+	  ++printCount;
+  }
+}
 		//
 	
 //Bit read, send to print		     
