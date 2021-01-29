@@ -2,9 +2,13 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+
 #define TRUE 1
 #define FALSE 0
 #define BAD_NUMBER_ARGS 1
+
+const int ASCII_126 = 126;
+const int ASCII_32 = 32;
 
 /**
  * Parses the command line.
@@ -44,15 +48,29 @@ FILE *parseCommandLine(int argc, char **argv, int *bits) {
 
 void printDataAsHex(unsigned char *data, size_t size) {
   int printCount = 0;
+  int decimalVal;
   //print data as hex
   for (int i = 0; i < size; i++) {
     printf(" ");
-    printf("%02x", data[i]);
-    j++;
-    (j < size) ? printf("%02x", data[i+1])
-	       : printf("0a");
-    //track spaces printed
-    printCount += 5;
+    decimalVal = (int)(data[i]);
+    if (decimalVal < ASCII_32 || decimalVal > ASCII_126) {
+        printf("0a");
+    }
+    else {
+        printf("%02x", data[i]);
+    }
+    printCount += 3;
+    i++;
+    if (i < size) {
+        decimalVal = (int)(data[i]);
+        if (decimalVal < ASCII_32 || decimalVal > ASCII_126) {
+            printf("0a");
+        }
+        else {
+            printf("%02x", data[i]);
+        }
+        printCount += 2;
+    }
   }
   //print remaining for width 20
   while (printCount < 40) {
@@ -70,8 +88,15 @@ void printDataAsHex(unsigned char *data, size_t size) {
  * size: the size of the array
  **/
 void printDataAsChars(unsigned char *data, size_t size) {
+    int decimalVal;
 	for(int i = 0; i < size; i++) {
+        decimalVal = (int)(data[i]);
+        if (decimalVal < ASCII_32 || decimalVal > ASCII_126) {
+            printf(".");
+        }
+        else {
 		printf("%c", data[i]);
+        }
     }
 }
 
@@ -93,16 +118,17 @@ void readAndPrintInputAsHex(FILE *input) {
 //Bit print
 void printDataAsBits(unsigned char *data, size_t size) {
   int printCount = 0;
+  int binaryTmp;
   int decimalVal;
   for (int i = 0; i < size; i++) {
 	printf(" ");
 	++printCount;
 	decimalVal = (int)(data[i]);
 	for (int j = 7; j >= 0; j--) {
-		binaryTmp = decimalVal % (2 << j);
+		binaryTmp = decimalVal / (1 << j);
 		printf("%d", binaryTmp);
 		++printCount;
-		decimalVal -= (2 << j);
+		decimalVal = decimalVal % (1 << j);
 	}
   }
   while (printCount < 54) {
@@ -124,7 +150,7 @@ void readAndPrintInputAsBits(FILE *input) {
     printf("  ");
     printDataAsChars(data, numBytesRead);
     printf("\n");
-    numBytesRead = fread(data, 1, 16, input);
+    numBytesRead = fread(data, 1, 6, input);
   }
 }
 
