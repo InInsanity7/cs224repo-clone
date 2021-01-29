@@ -43,11 +43,12 @@ FILE *parseCommandLine(int argc, char **argv, int *bits) {
  **/
 
 void printDataAsHex(unsigned char *data, size_t size) {
-  for (int i = 0; i < size; i++) {
+  int j = 0;
+  for (int i = 0; i < size; i = i + 2) {
     printf(" ");
     printf("%02x", data[i]);
-    ++i;
-    (i < size) ? printf("%02x", data[i])
+    j++;
+    (j < size) ? printf("%02x", data[i+1])
 	       : printf("0a");
   }
 }
@@ -63,6 +64,7 @@ void printDataAsHex(unsigned char *data, size_t size) {
 void printDataAsChars(unsigned char *data, size_t size) {
 	for(int i = 0; i < size; i++) {
 		printf("%c", data[i]);
+    }
 }
 
 //Hex read, send to print
@@ -81,7 +83,8 @@ void readAndPrintInputAsHex(FILE *input) {
   }
 }
 //Bit print
-void printDataAsBits(unsigned char *data, size_t size) {
+/*
+  void printDataAsBits(unsigned char *data, size_t size) {
   while (i < 6) {
     if (i < size) {
       printf(" ");
@@ -103,6 +106,7 @@ void readAndPrintInputAsBits(FILE *input) {
     numBytesRead = fread(data, 1, 16, input);
   }
 }
+*/
 
 int main(int argc, char **argv) {
   int bits = FALSE;
@@ -110,8 +114,11 @@ int main(int argc, char **argv) {
 
   if (bits == FALSE) {
     readAndPrintInputAsHex(input);
-  } else {
+  } 
+/*
+  else {
     readAndPrintInputAsBits(input);
   }
+*/
   return 0;
 }
